@@ -1,23 +1,103 @@
 const { exec } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
-const BACKUP_DIR = path.join(__dirname, 'backups');
-const USER = 'root';
-const PASSWORD = 'monmotdepasse';
-const DATABASE = 'ma_base';
+const listBackups = (req, res) => {
+  const backupsDir = path.join(__dirname, '../backups');
 
-const backupDatabase = (req, res) => {
-  const date = new Date().toISOString().replace(/:/g, '-');
-  const backupFile = `${BACKUP_DIR}/${DATABASE}_backup_${date}.sql`;
-
-  exec(`mysqldump -u ${USER} -p${PASSWORD} ${DATABASE} > ${backupFile}`, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Erreur lors de la sauvegarde : ${error}`);
-      return res.status(500).json({ message: 'Erreur lors de la sauvegarde' });
+  fs.readdir(backupsDir, (err, files) => {
+    if (err) {
+      console.error('Erreur lors de la lecture du dossier des sauvegardes', err);
+      return res.status(500).send('Erreur lors de la récupération des sauvegardes');
     }
-    console.log(`Sauvegarde réussie : ${backupFile}`);
-    res.status(200).json({ message: 'Sauvegarde réussie', file: backupFile });
+
+    const sqlFiles = files.filter(file => file.endsWith('.sql')); // Filtrer les fichiers .sql
+    res.status(200).json(sqlFiles);
   });
 };
 
-module.exports = { backupDatabase };
+// Sauvegarder la base de données MySQL
+const backupMySQL = (req, res) => {
+  const { dbName, user, password } = req.body;
+  const backupPath = path.join(__dirname, `../backups/${dbName}_backup.sql`);
+
+  const backupCommand = `mysqldump -u ${user} -p${password} ${dbName} > ${backupPath}`;
+
+  exec(backupCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Erreur lors de la sauvegarde MySQL: ${error}`);
+      res.status(500).send('Erreur lors de la sauvegarde MySQL');
+      return;
+    }
+    res.status(200).send(`Sauvegarde MySQL réussie : ${backupPath}`);
+  });
+};
+
+// Sauvegarder la base de données PostgreSQL
+const backupPostgres = (req, res) => {
+  const { dbName, user, password } = req.body;
+  const backupPath = path.join(__dirname, `../backups/${dbName}_backup.sql`);
+
+  const backupCommand = `PGPASSWORD=${password} pg_dump -U ${user} -d ${dbName} > ${backupPath}`;
+
+  exec(backupCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Erreur lors de la sauvegarde PostgreSQL: ${error}`);
+      res.status(500).send('Erreur lors de la sauvegarde PostgreSQL');
+      return;
+    }
+    res.status(200).send(`Sauvegarde PostgreSQL réussie : ${backupPath}`);
+  });
+};
+
+// Restauration MySQL
+const restoreMySQL = (req, res) => {
+  const { dbName, user, password, fileName } = req.body;
+
+  if (!fileName) {
+    return res.status(400).send('Nom du fichier de sauvegarde manquant');
+  }
+
+  const backupPath = path.join(__dirname, `../backups/${fileName}`);
+
+  const restoreCommand = `mysql -u ${user} -p${password} ${dbName} < ${backupPath}`;
+
+  exec(restoreCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Erreur lors de la restauration MySQL: ${error}`);
+      res.status(500).send('Erreur lors de la restauration MySQL');
+      return;
+    }
+    res.status(200).send('Restauration MySQL réussie');
+  });
+};
+
+// Restauration PostgreSQL
+const restorePostgres = (req, res) => {
+  const { dbName, user, password, fileName } = req.body;
+
+  if (!fileName) {
+    return res.status(400).send('Nom du fichier de sauvegarde manquant');
+  }
+
+  const backupPath = path.join(__dirname, `../backups/${fileName}`);
+
+  const restoreCommand = `PGPASSWORD=${password} psql -U ${user} -d ${dbName} -f ${backupPath}`;
+
+  exec(restoreCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Erreur lors de la restauration PostgreSQL: ${error}`);
+      res.status(500).send('Erreur lors de la restauration PostgreSQL');
+      return;
+    }
+    res.status(200).send('Restauration PostgreSQL réussie');
+  });
+};
+
+module.exports = {
+  listBackups,
+  backupMySQL,
+  backupPostgres,
+  restoreMySQL,
+  restorePostgres
+};
