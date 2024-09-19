@@ -4,6 +4,8 @@ const dbRoutes = require('./routes/databaseRoutes');
 const bodyParser = require('body-parser');
 const backupRoutes = require('./routes/backupRoutes');
 const cron = require('node-cron');
+const path = require('path');
+const { exec } = require('child_process');
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -17,22 +19,26 @@ app.get('/', (req, res) => {
 });
 
 // Fonction pour sauvegarder MySQL
-const backupMySQL = (dbName, user, password, host) => {
+const backupMySQL = async (dbName, user, password, host) => {
+    
     const now = new Date();
     const time = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
-  
     const backupPath = path.join(__dirname, `./backups/${dbName}_mysql_backup_${time}.sql`);
-  
+
     const backupCommand = `mysqldump -h ${host} -u ${user} -p${password} ${dbName} > ${backupPath}`;
-    console.log(`Commande de sauvegarde : ${backupCommand}`);
+    //console.log(`Commande de sauvegarde : ${backupCommand}`);
   
-    exec(backupCommand, (error, stdout, stderr) => {
+    await exec(backupCommand, (error, stdout, stderr) => {
+      console.log('exec');
       if (error) {
         console.error(`Erreur lors de la sauvegarde MySQL: ${error.message}`);
-        console.error(`stderr: ${stderr}`);  // Ajoutez ceci pour voir les erreurs
-        console.log(`stdout: ${stdout}`);    // Ajoutez ceci pour voir les sorties réussies
+        console.error(`stderr: ${stderr}`); 
+        console.log(`stdout: ${stdout}`);   
         return;
       }
+
+      console.error(`stderr: ${stderr}`); 
+      console.log(`stdout: ${stdout}`);   
       console.log(`Sauvegarde MySQL réussie : ${backupPath}`);
     });
   };
@@ -56,7 +62,6 @@ const backupMySQL = (dbName, user, password, host) => {
     });
   };
   
-  // Route pour créer une tâche cron
   app.post('/create-cron', (req, res) => {
     const { dbType, dbName, user, password, host, frequency } = req.body;
   
@@ -64,26 +69,24 @@ const backupMySQL = (dbName, user, password, host) => {
       return res.status(400).send('Tous les champs sont obligatoires.');
     }
   
-    // Déterminer le pattern cron en fonction de la fréquence choisie
     let cronPattern;
     switch (frequency) {
       case 'hourly':
-        cronPattern = '08 17 * * *';  // Toutes les heures
+        cronPattern = '* * * * *';
         break;
       case 'daily':
-        cronPattern = '44 13 * * *';  // Tous les jours à minuit
+        cronPattern = '44 13 * * *';
         break;
       case 'weekly':
-        cronPattern = '0 0 * * 0';  // Tous les dimanches à minuit
+        cronPattern = '0 0 * * 0';
         break;
       case 'monthly':
-        cronPattern = '0 0 1 * *';  // Le premier de chaque mois à minuit
+        cronPattern = '0 0 1 * *'; 
         break;
       default:
         return res.status(400).send('Fréquence invalide.');
     }
   
-    // Créer la tâche cron pour MySQL ou PostgreSQL
     if (dbType === 'mysql') {
       cron.schedule(cronPattern, () => {
         console.log(`Démarrage de la sauvegarde MySQL pour ${dbName}...`);
