@@ -16,10 +16,12 @@ const listBackups = (req, res) => {
   });
 };
 
-// Sauvegarder la base de données MySQL
 const backupMySQL = (req, res) => {
   const { dbName, user, password } = req.body;
-  const backupPath = path.join(__dirname, `../backups/${dbName}_backup.sql`);
+  const now = new Date();
+  const time = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
+
+  const backupPath = path.join(__dirname, `../backups/${dbName}_backup_${time}.sql`);
 
   const backupCommand = `mysqldump -u ${user} -p${password} ${dbName} > ${backupPath}`;
 
@@ -36,7 +38,10 @@ const backupMySQL = (req, res) => {
 // Sauvegarder la base de données PostgreSQL
 const backupPostgres = (req, res) => {
   const { dbName, user, password } = req.body;
-  const backupPath = path.join(__dirname, `../backups/${dbName}_backup.sql`);
+  const now = new Date();
+  const timestamp = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
+
+  const backupPath = path.join(__dirname, `../backups/${dbName}_backup_${timestamp}.sql`);
 
   const backupCommand = `PGPASSWORD=${password} pg_dump -U ${user} -d ${dbName} > ${backupPath}`;
 
