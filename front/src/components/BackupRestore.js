@@ -58,7 +58,7 @@ const BackupRestore = () => {
             <select
               value={dbType}
               onChange={(e) => setDbType(e.target.value)}
-              className="block w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-1/2 px-3 bg-blue-100 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value="mysql">MySQL</option>
               <option value="postgres">PostgreSQL</option>
@@ -103,7 +103,7 @@ const BackupRestore = () => {
             <select
               value={action}
               onChange={(e) => setAction(e.target.value)}
-              className="block w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-1/2 px-3 py-2 border bg-blue-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value="backup">Sauvegarde</option>
               <option value="restore">Restauration</option>
@@ -111,7 +111,7 @@ const BackupRestore = () => {
           </div>
 
           {action === 'restore' && (
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center ">
               <label className="block text-sm font-medium text-gray-700 mb-1">Sélectionner une sauvegarde :</label>
               <select
                 value={selectedBackup}

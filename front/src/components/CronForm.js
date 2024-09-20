@@ -12,7 +12,7 @@ const CronForm = () => {
               id="dbType"
               name="dbType"
               required
-              className="block w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-1/2 px-3 py-2 border bg-blue-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value="mysql">MySQL</option>
               <option value="postgresql">PostgreSQL</option>
@@ -69,7 +69,7 @@ const CronForm = () => {
               id="frequency"
               name="frequency"
               required
-              className="block w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-1/2 px-3 py-2 border bg-blue-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value="hourly">Toutes les heures</option>
               <option value="daily">Tous les jours à minuit</option>
