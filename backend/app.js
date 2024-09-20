@@ -72,10 +72,10 @@ const backupMySQL = async (dbName, user, password, host) => {
     let cronPattern;
     switch (frequency) {
       case 'hourly':
-        cronPattern = '* * * * *';
+        cronPattern = '0 * * * *';
         break;
       case 'daily':
-        cronPattern = '44 13 * * *';
+        cronPattern = '0 0 * * *';
         break;
       case 'weekly':
         cronPattern = '0 0 * * 0';

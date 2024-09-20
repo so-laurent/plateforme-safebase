@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
 const pg = require('pg');
+const insertDatabase = require('../controllers/insertDatabaseController');
 
 let dbConnections = [];
 
@@ -21,5 +22,12 @@ const addDatabase = (req, res) => {
         res.status(200).json({ message: 'Connexion ajoutée avec succès.' });
     });
 };
+const insertData = (req, res) => {
+    const { dbType, host, user, password, database } = req.body;
+    const tableName = 'all_databases';
+
+    insertDatabase(req, res);
+
+}
 
 module.exports = { addDatabase };
