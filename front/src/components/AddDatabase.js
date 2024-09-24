@@ -25,7 +25,7 @@ const AddDatabase = () => {
   return (
     <div className="flex justify-center items-start bg-gray-100">
       <div className="w-1/2 m-5">
-        <h2 className="text-2xl font-bold text-center mb-4">Ajouter une Base de Données</h2> {/* Titre ajouté */}
+        <h2 className="text-2xl font-bold text-center mb-4">Ajouter une Base de Données</h2>
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md space-y-4">
           <div className="flex flex-col items-center">
             <label className="block text-sm font-medium text-gray-700 mb-1">Hôte</label>
