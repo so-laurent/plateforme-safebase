@@ -3,6 +3,11 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import AddDatabase from './components/AddDatabase';
 import BackupRestore from './components/BackupRestore';
 import CronForm from './components/CronForm';
+import MyDatabases from './components/MyDatabases';
+import Home from './components/Home';
+import MyBackups from './components/MyBackups';
+import MyCrons from './components/MyCrons';
+import MyActions from './components/MyActions';
 
 const App = () => {
   return (
@@ -19,7 +24,12 @@ const App = () => {
               </li>
               <li className="mb-4">
                 <Link to="/add" className="block p-2 hover:bg-gray-700 rounded">
-                  Ajouter une BDD
+                  Ajouter une base de données
+                </Link>
+              </li>
+              <li className="mb-4">
+                <Link to="/my-databases" className="block p-2 hover:bg-gray-700 rounded">
+                  Mes bases de données
                 </Link>
               </li>
               <li className="mb-4">
@@ -28,8 +38,23 @@ const App = () => {
                 </Link>
               </li>
               <li className="mb-4">
+                <Link to="/my-backups" className="block p-2 hover:bg-gray-700 rounded">
+                  Mes sauvegardes
+                </Link>
+              </li>
+              <li className="mb-4">
+                <Link to="/my-actions" className="block p-2 hover:bg-gray-700 rounded">
+                  Mes actions
+                </Link>
+              </li>
+              <li className="mb-4">
                 <Link to="/cron" className="block p-2 hover:bg-gray-700 rounded">
-                  CRON
+                  Planifier des sauvegardes régulières (CRON)
+                </Link>
+              </li>
+              <li className="mb-4">
+                <Link to="/my-crons" className="block p-2 hover:bg-gray-700 rounded">
+                  Mes CRON
                 </Link>
               </li>
             </ul>
@@ -40,9 +65,14 @@ const App = () => {
         <div className="w-5/6 bg-gray-100 p-8">
           <div className="bg-white shadow-lg rounded-lg p-6">
             <Routes>
+              <Route path="/" element={<Home />} />
               <Route path="/add" element={<AddDatabase />} />
+              <Route path="/my-databases" element={<MyDatabases />} />
+              <Route path="/my-backups" element={<MyBackups />} />
               <Route path="/backup-restore" element={<BackupRestore />} />
+              <Route path="/my-actions" element={<MyActions />} />
               <Route path="/cron" element={<CronForm />} />
+              <Route path="/my-crons" element={<MyCrons />} />
             </Routes>
           </div>
         </div>

@@ -15,8 +15,10 @@ const AddDatabase = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/databases/add', formData);
+      const response = await axios.post('localhost:8000/api/databases/add', formData);
+      console.log(response.data.message);
       alert(response.data.message);
+      
     } catch (error) {
       alert('Erreur lors de l\'ajout de la connexion.');
     }
@@ -25,12 +27,13 @@ const AddDatabase = () => {
   return (
     <div className="flex justify-center items-start bg-gray-100">
       <div className="w-1/2 m-5">
-        <h2 className="text-2xl font-bold text-center mb-4">Ajouter une Base de Données</h2>
+        <h2 className="text-2xl font-bold text-center mb-4">Ajouter une base de données</h2>
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md space-y-4">
           <div className="flex flex-col items-center">
             <label className="block text-sm font-medium text-gray-700 mb-1">Hôte</label>
             <input
               type="text"
+              name="host"
               placeholder="Hôte"
               value={formData.host}
               onChange={(e) => setFormData({ ...formData, host: e.target.value })}
@@ -42,6 +45,7 @@ const AddDatabase = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Utilisateur</label>
             <input
               type="text"
+              name='user'
               placeholder="Utilisateur"
               value={formData.user}
               onChange={(e) => setFormData({ ...formData, user: e.target.value })}
@@ -53,6 +57,7 @@ const AddDatabase = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
             <input
               type="password"
+              name='password'
               placeholder="Mot de passe"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -64,6 +69,7 @@ const AddDatabase = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Base de données</label>
             <input
               type="text"
+              name="database"
               placeholder="Base de données"
               value={formData.database}
               onChange={(e) => setFormData({ ...formData, database: e.target.value })}
@@ -74,9 +80,10 @@ const AddDatabase = () => {
           <div className="flex justify-center">
             <button
               type="submit"
+              name='submit'
               className="bg-gray-800 text-white py-1 px-3 rounded-md shadow hover:bg-gray-700 focus:ring-2 focus:ring-gray-600 text-sm"
             >
-              Ajouter la connexion
+              Ajouter
             </button>
           </div>
         </form>

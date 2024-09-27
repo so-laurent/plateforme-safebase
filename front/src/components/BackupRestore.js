@@ -30,7 +30,8 @@ const BackupRestore = () => {
       let data = {
         dbName,
         user,
-        password
+        password,
+        dbType
       };
 
       if (action === 'backup') {
@@ -69,6 +70,7 @@ const BackupRestore = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Nom de la base de données :</label>
             <input
               type="text"
+              name='database'
               value={dbName}
               onChange={(e) => setDbName(e.target.value)}
               required
@@ -80,6 +82,7 @@ const BackupRestore = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Utilisateur :</label>
             <input
               type="text"
+              name='user'
               value={user}
               onChange={(e) => setUser(e.target.value)}
               required
@@ -91,6 +94,7 @@ const BackupRestore = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe :</label>
             <input
               type="password"
+              name='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

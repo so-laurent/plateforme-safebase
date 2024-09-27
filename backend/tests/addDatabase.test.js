@@ -2,7 +2,7 @@ const request = require('supertest');
 const express = require('express');
 const mysql = require('mysql2');
 const pg = require('pg');
-const { addDatabase } = require('./controllers/databaseController');
+const { addDatabase } = require('../controllers/databaseController');
 
 const app = express();
 app.use(express.json());
