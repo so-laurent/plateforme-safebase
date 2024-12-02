@@ -63,8 +63,3 @@ jobs:
       run: |
         docker build -t laurentso/safebase:${{ github.ref_name }} -f ./backend/Dockerfile.backend .
         docker push laurentso/safebase:${{ github.ref_name }}
-
-    - name: Build Frontend Docker Image
-      run: |
-        docker build -t laurentso/safebase:${{ github.ref_name }} -f ./front/Dockerfile.frontend .
-        docker push laurentso/safebase:${{ github.ref_name }}
