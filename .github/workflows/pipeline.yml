@@ -9,7 +9,7 @@ on:
   pull_request:
 
 jobs:
-  # Étape de tests (désactivée temporairement)
+  # tests (désactivée temporairement)
   test:
     runs-on: ubuntu-latest
 
@@ -52,13 +52,13 @@ jobs:
 
     - name: Build Backend Docker Image
       run: |
-        docker build -t myorg/backend:${{ github.ref_name }} -f ./backend/Dockerfile.backend .
-        docker push myorg/backend:${{ github.ref_name }}
+        docker build -t myorg/backend:${{ github.REF_NAME }} -f ./backend/Dockerfile.backend .
+        docker push myorg/backend:${{ github.REF_NAME }}
 
     - name: Build Frontend Docker Image
       run: |
-        docker build -t myorg/frontend:${{ github.ref_name }} -f Dockerfile.frontend ./frontend
-        docker push myorg/frontend:${{ github.ref_name }}
+        docker build -t myorg/frontend:${{ github.REF_NAME }} -f Dockerfile.frontend ./frontend
+        docker push myorg/frontend:${{ github.REF_NAME }}
 
   notify:
     needs: build-and-push-docker
@@ -68,9 +68,9 @@ jobs:
     - name: Send Notification to Google Chat
       run: |
         if [ "${{ job.status }}" == "success" ]; then
-          MESSAGE="Pipeline succeeded for ${{ github.ref_name }}."
+          MESSAGE="Pipeline succeeded for ${{ github.REF_NAME }}."
         else
-          MESSAGE="Pipeline failed for ${{ github.ref_name }}. Check logs for details."
+          MESSAGE="Pipeline failed for ${{ github.REF_NAME }}. Check logs for details."
         fi
 
         curl -X POST -H "Content-Type: application/json" \
