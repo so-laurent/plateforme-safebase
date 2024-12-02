@@ -57,7 +57,7 @@ jobs:
 
     - name: Build Frontend Docker Image
       run: |
-        docker build -t laurentso/safebase:${{ github.ref_name }} -f ./front/Dockerfile.frontend ./front
+        docker build -t laurentso/safebase:${{ github.ref_name }} -f ./front/Dockerfile.frontend .
         docker push laurentso/safebase:${{ github.ref_name }}
 
   notify:
@@ -68,9 +68,9 @@ jobs:
     - name: Send Notification to Google Chat
       run: |
         if [ "${{ job.status }}" == "success" ]; then
-          MESSAGE="Pipeline succeeded for ${{ github.REF_NAME }}."
+          MESSAGE="Pipeline succeeded for ${{ github.ref_name }}."
         else
-          MESSAGE="Pipeline failed for ${{ github.REF_NAME }}. Check logs for details."
+          MESSAGE="Pipeline failed for ${{ github.ref_name }}. Check logs for details."
         fi
 
         curl -X POST -H "Content-Type: application/json" \
