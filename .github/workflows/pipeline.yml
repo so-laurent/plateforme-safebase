@@ -47,6 +47,9 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
+    - name: Verify Docker login
+      run: docker info
+
     - name: Build Backend Docker Image
       run: |
         docker build -t myorg/backend:${{ github.ref_name }} -f ./backend/Dockerfile.backend .
