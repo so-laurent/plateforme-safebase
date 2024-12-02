@@ -7,6 +7,7 @@ function MyDatabases() {
   const [error, setError] = useState(null);
   const [databases, setDatabases] = useState([]);
 
+  console.log(databases)
   useEffect(() => {
     fetch('http://localhost:8000/my-databases')
       .then(response => {
