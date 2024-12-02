@@ -52,13 +52,13 @@ jobs:
 
     - name: Build Backend Docker Image
       run: |
-        docker build -t safebase/backend:${{ github.REF_NAME }} -f ./backend/Dockerfile.backend .
-        docker push safebase/backend:${{ github.REF_NAME }}
+        docker build -t laurentso/safebase:${{ github.ref_name }} -f ./backend/Dockerfile.backend .
+        docker push laurentso/safebase:${{ github.ref_name }}
 
     - name: Build Frontend Docker Image
       run: |
-        docker build -t safebase/frontend:${{ github.REF_NAME }} -f Dockerfile.frontend ./frontend
-        docker push safebase/frontend:${{ github.REF_NAME }}
+        docker build -t laurentso/safebase:${{ github.ref_name }} -f Dockerfile.frontend ./frontend
+        docker push laurentso/safebase:${{ github.ref_name }}
 
   notify:
     needs: build-and-push-docker
