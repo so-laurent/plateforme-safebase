@@ -32,6 +32,15 @@ jobs:
     # - name: Run Frontend Tests
     #   working-directory: ./frontend
     #   run: npm test
+  notify-before-build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Notification Before Build
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"text\": \"Tests passed. Starting Docker image build for ${{ github.ref_name }}.\"}" \
+            ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
 
   build-and-push-docker:
     # On retire la dépendance aux tests (needs: test) pour éviter qu'elle bloque
@@ -59,20 +68,3 @@ jobs:
       run: |
         docker build -t laurentso/safebase:${{ github.ref_name }} -f ./front/Dockerfile.frontend .
         docker push laurentso/safebase:${{ github.ref_name }}
-
-  notify:
-    needs: build-and-push-docker
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Send Notification to Google Chat
-      run: |
-        if [ "${{ job.status }}" == "success" ]; then
-          MESSAGE="Pipeline succeeded for ${{ github.ref_name }}."
-        else
-          MESSAGE="Pipeline failed for ${{ github.ref_name }}. Check logs for details."
-        fi
-
-        curl -X POST -H "Content-Type: application/json" \
-          -d "{\"text\": \"${MESSAGE}\"}" \
-          ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
