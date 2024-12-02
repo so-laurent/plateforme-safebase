@@ -42,7 +42,7 @@ jobs:
 
     # Construire et pousser les images Docker
     - name: Log in to Docker Hub
-      uses: docker/login-action@v2
+      uses: docker/login-action@v
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
@@ -52,13 +52,13 @@ jobs:
 
     - name: Build Backend Docker Image
       run: |
-        docker build -t myorg/backend:${{ github.REF_NAME }} -f ./backend/Dockerfile.backend .
-        docker push myorg/backend:${{ github.REF_NAME }}
+        docker build -t safebase/backend:${{ github.REF_NAME }} -f ./backend/Dockerfile.backend .
+        docker push safebase/backend:${{ github.REF_NAME }}
 
     - name: Build Frontend Docker Image
       run: |
-        docker build -t myorg/frontend:${{ github.REF_NAME }} -f Dockerfile.frontend ./frontend
-        docker push myorg/frontend:${{ github.REF_NAME }}
+        docker build -t safebase/frontend:${{ github.REF_NAME }} -f Dockerfile.frontend ./frontend
+        docker push safebase/frontend:${{ github.REF_NAME }}
 
   notify:
     needs: build-and-push-docker
