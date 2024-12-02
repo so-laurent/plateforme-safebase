@@ -16,7 +16,7 @@ const listBackups = (req, res) => {
     res.status(200).json(sqlFiles);
   });
 };
-// Test
+// Test d
 const backupMySQL = (req, res) => {
   const { dbName, user, password } = req.body;
   const now = new Date();
